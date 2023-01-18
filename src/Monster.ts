@@ -1,36 +1,32 @@
-import Archetype from './Archetypes';
-import Energy from './Energy';
-import { Elf } from './Races';
+import Fighter, { SimpleFighter } from './Fighter';
 
-export default abstract class Race {
-  private _race: Race | Elf;
-  private _archetype: Archetype;
-  private _maxLifePoints: number;
+export default class Monster implements SimpleFighter {
   private _lifePoints: number;
   private _strength: number;
-  private _defense: number;
-  private _dexterity: number;
-  private _energy: Energy;
-  public _name: string;
 
-  constructor(name : string) {
-    this._name = name;
-    this._dexterity = Math.floor(Math.random() * 10) + 1;
-    this._race = type_ Elf;
-
+  constructor() {
+    this._lifePoints = 85;
+    this._strength = 65;
   }
 
-  get name(): string {
-    return this._name;
+  get lifePoints() {
+    return this._lifePoints;
   }
 
-  get dexterity(): number {
-    return this._dexterity;
+  get strength() {
+    return this._strength;
   }
 
-  abstract get maxLifePoints(): number;
+  receiveDamage(attackPoints: number): number {
+    const damage = this._lifePoints - attackPoints;
+    if (damage <= 0) {
+      this._lifePoints = -1;
+    }
+    return this._lifePoints;
+  }
 
-  public static createdRacesInstances(): number {
-    throw new Error('Not implemented');
+  attack(enemy: Fighter): void {
+    const damage = this._strength;
+    enemy.receiveDamage(damage);
   }
 }
